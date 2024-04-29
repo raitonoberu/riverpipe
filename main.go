@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 
@@ -62,19 +61,14 @@ func main() {
 			ch := make(chan event.Event, bufsize)
 
 			go func() {
-				err := out.Run(ch)
+				err := client.Run(ch)
 				if err != nil {
 					fmt.Fprintln(os.Stderr, "error:", err.Error())
 					client.Release()
 					os.Exit(1)
 				}
 			}()
-
-			err = client.Run(ch)
-			if err != nil {
-				log.Println(err)
-			}
-			return nil
+			return out.Run(ch)
 		},
 	}
 
